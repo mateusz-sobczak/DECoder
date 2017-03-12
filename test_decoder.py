@@ -11,3 +11,15 @@ class TestDecoder(TestCase):
 
     def test_base64(self):
         self.assertEqual(self.decoder.base64('aGVsbG8='), 'hello')
+
+    def test_base16(self):
+        self.assertEqual(self.decoder.base16('68656C6C6F'), 'hello')
+
+    def test_base32(self):
+        self.assertEqual(self.decoder.base32('NBSWY3DP'), 'hello')
+
+    def test_html(self):
+        self.assertEqual(self.decoder.html('hello&gt;'), 'hello>')
+
+    def test_url(self):
+        self.assertEqual(self.decoder.url('hello%21'), 'hello!')
