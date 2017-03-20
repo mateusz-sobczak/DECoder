@@ -1,6 +1,7 @@
 import base64
 import html
 import urllib.parse
+import rsa
 
 
 class Encoder:
@@ -59,6 +60,18 @@ class Encoder:
         self.encrypted = urllib.parse.quote_plus(self.message)
 
         return self.encrypted
+
+    def rsa(self, message=None, pub_key=None):
+        if message is not None:
+                self.message = message
+        if pub_key is None:
+            exit(0)
+            # TODO add generating public keys
+
+        self.encrypted = rsa.encrypt(self.message, pub_key)
+
+        # TODO need to write a test
+        return [pub_key, self.encrypted]
 
     def __init__(self, message=None):
         if message is None:
@@ -122,6 +135,18 @@ class Decoder:
 
         self.message = urllib.parse.unquote_plus(self.encrypted)
 
+        return self.message
+
+    def rsa(self, encrypted=None, priv_key=None):
+        if encrypted is not None:
+            self.encrypted = encrypted
+        if priv_key is None:
+            exit(0)
+            # TODO add generating private keys
+
+        self.message = rsa.decrypt(self.encrypted, priv_key)
+
+        # TODO need to write a test
         return self.message
 
     def __init__(self, encrypted=None):
