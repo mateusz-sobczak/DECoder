@@ -65,13 +65,16 @@ class Encoder:
         if message is not None:
                 self.message = message
         if pub_key is None:
-            exit(0)
-            # TODO add generating public keys
+            (pub_key, priv_key) = rsa.newkeys(256)
+            generated = True
+        else:
+            generated = False
 
-        self.encrypted = rsa.encrypt(self.message, pub_key)
+        self.encrypted = rsa.encrypt(self.message.encode(), pub_key)
 
-        # TODO need to write a test
-        return [pub_key, self.encrypted]
+        if generated:
+            return [self.encrypted, pub_key, priv_key]
+        return self.encrypted
 
     def __init__(self, message=None):
         if message is None:
@@ -137,16 +140,12 @@ class Decoder:
 
         return self.message
 
-    def rsa(self, encrypted=None, priv_key=None):
+    def rsa(self, priv_key, encrypted=None):
         if encrypted is not None:
             self.encrypted = encrypted
-        if priv_key is None:
-            exit(0)
-            # TODO add generating private keys
 
         self.message = rsa.decrypt(self.encrypted, priv_key)
 
-        # TODO need to write a test
         return self.message
 
     def __init__(self, encrypted=None):
