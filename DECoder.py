@@ -77,10 +77,14 @@ class Encoder:
             return [self.encrypted, pub_key, priv_key]
         return self.encrypted
 
-    def des(self, message=None):
 
+    def des(self, message=None):
+        # TODO finish the function
+        exit(0)
 
     def triple_des(self, message=None):
+        # TODO finish the function
+        exit()
 
     def __init__(self, message=None):
         if message is None:
