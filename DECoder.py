@@ -2,6 +2,7 @@ import base64
 import html
 import urllib.parse
 import rsa
+import pyDes
 
 
 class Encoder:
@@ -75,6 +76,11 @@ class Encoder:
         if generated:
             return [self.encrypted, pub_key, priv_key]
         return self.encrypted
+
+    def des(self, message=None):
+
+
+    def triple_des(self, message=None):
 
     def __init__(self, message=None):
         if message is None:
