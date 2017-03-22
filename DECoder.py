@@ -2,7 +2,7 @@ import base64
 import html
 import urllib.parse
 import rsa
-import pyDes
+from pyDes import *
 
 
 class Encoder:
@@ -64,7 +64,7 @@ class Encoder:
 
     def rsa(self, message=None, pub_key=None):
         if message is not None:
-                self.message = message
+            self.message = message
         if pub_key is None:
             (pub_key, priv_key) = rsa.newkeys(256)
             generated = True
@@ -77,14 +77,13 @@ class Encoder:
             return [self.encrypted, pub_key, priv_key]
         return self.encrypted
 
+    def des(self, key='01234567', message=None):
+        if message is not None:
+            self.message = message
 
-    def des(self, message=None):
-        # TODO finish the function
-        exit(0)
-
-    def triple_des(self, message=None):
-        # TODO finish the function
-        exit()
+        k = des(key, CBC, b"\0\0\0\0\0\0\0\0", pad=None, padmode=PAD_PKCS5)
+        self.encrypted = k.encrypt(self.message)
+        return self.encrypted
 
     def __init__(self, message=None):
         if message is None:
@@ -157,6 +156,14 @@ class Decoder:
         self.message = rsa.decrypt(self.encrypted, priv_key)
 
         return self.message
+
+    def des(self, key='01234567', encrypted=None):
+        if encrypted is not None:
+            self.encrypted = encrypted
+
+        k = des(key, CBC, b"\0\0\0\0\0\0\0\0", pad=None, padmode=PAD_PKCS5)
+        self.encrypted = k.decrypt(self.encrypted)
+        return self.encrypted
 
     def __init__(self, encrypted=None):
         if encrypted is None:
